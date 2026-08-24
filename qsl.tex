@@ -1,0 +1,117 @@
+% QSL Card design by Ian Renton M0TRT. Public domain. Based on an example by Fabian Kurz, DJ5CW.
+
+\documentclass[10pt]{article}
+\pagestyle{empty}
+\usepackage{array}
+\usepackage[T1]{fontenc}
+\usepackage{tgschola}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\usepackage{eso-pic}
+\usepackage{xcolor}
+\usepackage{anyfontsize}
+\usepackage[outline]{contour}
+\usepackage[papersize={14cm,9cm}, margin=0.5cm, marginratio=1:1]{geometry}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\AddToShipoutPictureBG{
+    \ifodd\value{page}
+      \AtPageCenter{
+        \includegraphics[width=\paperwidth,height=\paperheight,valign=M,center=-0.55em]{bg.jpg}%
+        }
+    \fi
+}
+
+\begin{document}
+\vspace{0.5cm}
+\begin{center}
+\fontfamily{phv}\selectfont \fontsize{60}{72}\selectfont \textcolor{white}{\contour{black}{\textbf{MØTRT}}}
+\end{center}
+\vspace{4.5cm}
+\hfill
+\begin{minipage}{0.5\textwidth}
+\begin{center}
+{\huge {\fontfamily{phv}\selectfont \textcolor{white}{\contour{black}{\textbf{Ian Renton}}}}}
+
+\vspace{6pt}
+{\Large {\fontfamily{phv}\selectfont \textcolor{white}{\contour{black}{\textbf{Dorset, England}}}}}
+\end{center}
+\end{minipage}
+\newpage
+\begin{minipage}{0.6\textwidth}
+{\Large \textbf{MØTRT}} \quad {\textbf{Ian Renton}}
+
+{\small (Address removed from this version)}
+
+{\small Grid: IO90bs \quad WAB: SZ09 \quad CQ: 14 \quad ITU: 27}
+
+{\small ian@ianrenton.com \quad https://ianrenton.com}
+
+\end{minipage}
+\hfill
+\begin{minipage}{0.35\textwidth}
+\begin{tabular}{ | m{11.7em} | }
+\hline
+{\scriptsize VIA \vphantom{$\int\limits_{\dfrac aa}$}}\\
+\hline
+{\scriptsize TO STATION \vphantom{$\int\limits_{\dfrac aa}$}}\\
+\hline
+\end{tabular}
+\end{minipage}
+
+\smallskip
+
+\begin{center}
+\begin{tabular}{|w{c}{5em}|w{c}{6.5em}|w{c}{6em}|w{c}{4em}|w{c}{4em}|w{c}{4em}|}
+\hline
+{\footnotesize Your Call}&{\footnotesize Date (D/M/Y)}&{\footnotesize Time (UTC)}&{\footnotesize Band}&{\footnotesize Mode}&{\footnotesize Report}\\
+\hline
+\vphantom{$\dfrac b b$}& & & & & \\
+\hline
+\end{tabular}
+
+\bigskip
+
+\begin{tabular}{|w{c}{4em}|w{c}{20em}|w{c}{4em}|w{c}{3.9em}|}
+\hline
+{\footnotesize My QTH} & \multicolumn{3}{l|}{\footnotesize \vphantom{$\dfrac b b$} $\square$ Home \enspace $\square$ Portable: } \\
+\hline
+{\footnotesize Transceiver} & {\footnotesize \vphantom{$\dfrac b b$} } & {\footnotesize Power} & {\footnotesize \vphantom{$\dfrac b b$} \qquad \qquad W} \\
+\hline
+{\footnotesize Antenna} & {\footnotesize \vphantom{$\dfrac b b$} } & {\footnotesize Via Sat.} & {\footnotesize \vphantom{$\dfrac b b$} } \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{3pt}
+\begin{minipage}{0.65\textwidth}
+{\footnotesize Thanking you for: \quad $\square$ our QSO \quad $\square$ your SWL report}
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}
+{\footnotesize QSL \quad \quad $\square$ PSE \quad $\square$ TNX}
+\end{minipage}
+
+\begin{minipage}{0.65\textwidth}
+\vspace{2em}
+\includegraphics[width=0.07\textwidth,valign=m]{rsgb.png}
+\includegraphics[width=0.06\textwidth,valign=m]{oarc.png}
+\includegraphics[width=0.4\textwidth,valign=m]{frars.png}
+\includegraphics[width=0.13\textwidth,valign=m]{pota.png}
+\includegraphics[width=0.095\textwidth,valign=m]{wwff.png}
+\includegraphics[width=0.095\textwidth,valign=m]{sota.png}
+\includegraphics[width=0.1\textwidth,valign=m]{ukbota.png}
+%\includegraphics[width=0.055\textwidth,valign=m]{bota.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}
+\vspace{0.5em}
+{\footnotesize VY 73,}
+
+\vspace{1.5em}
+\makebox{\rule[-0.5em]{11em}{0.4pt}}
+\end{minipage}
+
+\end{document}
