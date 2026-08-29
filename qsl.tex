@@ -1,125 +1,128 @@
-% QSL Card design by Ian Renton M0TRT. Public domain. Based on an example by Fabian Kurz, DJ5CW.
-
-\documentclass[10pt]{article}
-\pagestyle{empty}
+\documentclass{article}
+\usepackage[paperwidth=5.5in,paperheight=3.5in,margin=0pt]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{positioning,calc,backgrounds}
+\usepackage{multirow}
 \usepackage{array}
-\usepackage[T1]{fontenc}
-\usepackage{tgschola}
-\usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{latexsym}
-\usepackage{graphicx}
-\usepackage[export]{adjustbox}
-\usepackage{eso-pic}
 \usepackage{xcolor}
-\usepackage{anyfontsize}
-\usepackage[outline]{contour}
-\usepackage[papersize={14cm,9cm}, margin=0.5cm, marginratio=1:1]{geometry}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0pt}
-\AddToShipoutPictureBG{
-    \ifodd\value{page}
-      \AtPageCenter{
-        \includegraphics[width=\paperwidth,height=\paperheight,valign=M,center=-0.55em]{bg.jpg}%
-        }
-    \fi
-}
+\usepackage{graphicx}
 
-\newcommand{\callsign}{W1CMC}
-\newcommand{\name}{Charles M. Coldwell}
-\newcommand{\address}{46 Hammond Rd, Belmont, Massachusetts, USA}
-\newcommand{\grid}{FN42jj}
-\newcommand{\email}{coldwell@gmail.com}
-\newcommand{\url}{}
+\renewcommand{\familydefault}{\sfdefault}
 
+\definecolor{cardblue}{RGB}{0,32,96}
+
+\newcolumntype{D}{>{\centering\arraybackslash}p{1.3cm}}
+% Width chosen so this column's total rendered width (content + its own
+% left/right tabcolsep) equals the width of the "Date" block: three D
+% columns plus the two internal tabcolseps/rules between them.
+\newcolumntype{Q}{>{\centering\arraybackslash}p{4.775cm}}
+% Width chosen so four of these columns (plus their tabcolseps/rules)
+% total the same overall width as the first table (Q + 3 D columns).
+\newcolumntype{E}{>{\centering\arraybackslash}p{2.164cm}}
+% Third table's top row: a single left-justified column spanning the
+% full row, sized (with its own tabcolsep) to match the overall card width.
+\newcolumntype{L}{>{\raggedright\arraybackslash}p{9.965cm}}
+% Third table's bottom two rows: three equal columns, again sized to
+% match the same overall card width.
+\newcolumntype{T}{>{\centering\arraybackslash}p{3.0311cm}}
+\newcommand{\checkbox}{$\Box$}
+
+% Height of the blank strip reserved across the bottom of the card for a
+% postal barcode. Used both to position the form's bottom edge and to
+% stop the divider line short of the bottom. If you change this, the
+% form's \tikzpicture scale (search "transform shape" below) was tuned
+% to fit the space this leaves above the logos and may need adjusting too.
+\newcommand{\barcodegap}{0.5in}
+
+\pagestyle{empty}
 \begin{document}
-\vspace{0.5cm}
-\begin{center}
-\fontfamily{phv}\selectfont \fontsize{60}{72}\selectfont \textcolor{white}{\contour{black}{\textbf{\callsign}}}
-\end{center}
-\vspace{4.5cm}
-\hfill
-\begin{minipage}{0.5\textwidth}
-\begin{center}
-{\huge {\fontfamily{phv}\selectfont \textcolor{white}{\contour{black}{\textbf{\name}}}}}
 
-\vspace{6pt}
-{\Large {\fontfamily{phv}\selectfont \textcolor{white}{\contour{black}{\textbf{Belmont, Massachusetts}}}}}
-\end{center}
-\end{minipage}
+% Outer tikzpicture represents the full 5.5in x 3.5in card. The QSL
+% form (built at its natural size, ~4.36in wide) is nested inside a
+% scaled tikzpicture so it - and its text - shrink together, then
+% placed near the card's bottom-left corner. "transform shape" is what
+% makes the scale apply to the node text, not just the paths. Bottom
+% offset is 0.625in to leave a blank strip across the bottom of the
+% card for a postal barcode. Dropping the Grid line freed up enough
+% height that the form is width-bound (by the divider line) again, so
+% scale is back up to 0.60.
+\begin{tikzpicture}[remember picture, overlay]
+  \node (formnode) [anchor=south west, inner sep=0pt] at ($(current page.south west)+(0.08in,\barcodegap)$) {
+    \begin{tikzpicture}[scale=0.60, transform shape]
+      \node (table1) [inner sep=0pt] {
+        \begin{tabular}{Q|D|D|D}
+          Confirming QSO with & \multicolumn{3}{c}{Date} \\
+          \hline
+          \multirow{2}{*}{} & Day & Month & Year \\
+          \cline{2-4}
+           & & & \\
+        \end{tabular}
+      };
+
+      \node (table2) [inner sep=0pt, below=0.35cm of table1] {
+        \begin{tabular}{E|E|E|E}
+          UTC & MHz & RST & Mode 2-Way \\
+          \hline
+           & & & \\
+        \end{tabular}
+      };
+
+      \node (table3a) [inner sep=0pt, outer sep=0pt, below=0.35cm of table2] {
+        \begin{tabular}{L}
+          My QTH \hspace{0.75em} \checkbox~Home \hspace{0.75em} \checkbox~Portable: \\
+        \end{tabular}
+      };
+      \node (table3b) [inner sep=0pt, outer sep=0pt, below=0pt of table3a] {
+        \begin{tabular}{T|T|T}
+          Transceiver & Power & Antenna \\
+          \hline
+           & & \\
+        \end{tabular}
+      };
+
+      % Everything below sits behind the nodes above (drawn in this order:
+      % outer navy frame first/furthest back, then each table's white
+      % backing, then the divider line on top of table 3's white backing).
+      \begin{pgfonlayer}{background}
+        \draw [rounded corners=1em, fill=cardblue, draw=cardblue]
+          ($(table1.north west)+(-0.35cm,0.35cm)$) rectangle
+          ($(table3b.south east)+(0.35cm,-0.35cm)$);
+        \draw [rounded corners=.5em, fill=white] (table1.north west) rectangle (table1.south east);
+        \draw [rounded corners=.5em, fill=white] (table2.north west) rectangle (table2.south east);
+        \draw [rounded corners=.5em, fill=white] (table3a.north west) rectangle (table3b.south east);
+        \draw (table3a.south west) -- (table3a.south east);
+      \end{pgfonlayer}
+    \end{tikzpicture}
+  };
+
+  \node (headertext) [anchor=north west, inner sep=0pt, align=left] at ($(current page.north west)+(0.12in,-0.15in)$) {
+    {\Huge\bfseries W1CMC} \\[2pt]
+    {\normalsize Charles M. Coldwell} \\
+    {\normalsize 46 Hammond Rd} \\
+    {\normalsize Belmont, Massachusetts 02478-2253 USA} \\
+    {\normalsize coldwell@gmail.com}
+  };
+
+  % Logos, both the same height, left-aligned with the text above, sitting
+  % in the gap between the email line and the form.
+  \node [anchor=north west, inner sep=0pt] at ($(headertext.south west)+(0,-0.08in)$) {
+    \includegraphics[height=0.35in]{images/arrl.jpg}\hspace{0.15in}\includegraphics[height=0.35in]{images/sota.png}
+  };
+
+  % Divider line stops short of the bottom, leaving a blank strip across
+  % the full width of the card for a postal barcode.
+  \draw ($(current page.north)+(0,-0.1in)$) -- ($(current page.south)+(0,\barcodegap)$);
+\end{tikzpicture}
+
 \newpage
-\begin{minipage}{0.6\textwidth}
-{\Large \textbf{\callsign}} \quad {\textbf{\name}}
-
-{\small\address}
-
-{\small Grid: \grid}
-
-{\small\email\quad\url}
-
-\end{minipage}
-\hfill
-\begin{minipage}{0.35\textwidth}
-\begin{tabular}{ | m{11.7em} | }
-\hline
-{\scriptsize VIA \vphantom{$\int\limits_{\dfrac aa}$}}\\
-\hline
-{\scriptsize TO STATION \vphantom{$\int\limits_{\dfrac aa}$}}\\
-\hline
-\end{tabular}
-\end{minipage}
-
-\smallskip
-
-\begin{center}
-\begin{tabular}{|w{c}{5em}|w{c}{6.5em}|w{c}{6em}|w{c}{4em}|w{c}{4em}|w{c}{4em}|}
-\hline
-{\footnotesize Your Call}&{\footnotesize Date (D/M/Y)}&{\footnotesize Time (UTC)}&{\footnotesize Band}&{\footnotesize Mode}&{\footnotesize Report}\\
-\hline
-\vphantom{$\dfrac b b$}& & & & & \\
-\hline
-\end{tabular}
-
-\bigskip
-
-\begin{tabular}{|w{c}{4em}|w{c}{20em}|w{c}{4em}|w{c}{3.9em}|}
-\hline
-{\footnotesize My QTH} & \multicolumn{3}{l|}{\footnotesize \vphantom{$\dfrac b b$} $\square$ Home \enspace $\square$ Portable: } \\
-\hline
-{\footnotesize Transceiver} & {\footnotesize \vphantom{$\dfrac b b$} } & {\footnotesize Power} & {\footnotesize \vphantom{$\dfrac b b$} \qquad \qquad W} \\
-\hline
-{\footnotesize Antenna} & {\footnotesize \vphantom{$\dfrac b b$} } & {\footnotesize Via Sat.} & {\footnotesize \vphantom{$\dfrac b b$} } \\
-\hline
-\end{tabular}
-\end{center}
-\vspace{3pt}
-\begin{minipage}{0.65\textwidth}
-{\footnotesize Thanking you for: \quad $\square$ our QSO \quad $\square$ your SWL report}
-\end{minipage}
-\hfill
-\begin{minipage}{0.3\textwidth}
-{\footnotesize QSL \quad \quad $\square$ PSE \quad $\square$ TNX}
-\end{minipage}
-
-\begin{minipage}{0.65\textwidth}
-\vspace{2em}
-%\includegraphics[width=0.07\textwidth,valign=m]{rsgb.png}
-%\includegraphics[width=0.06\textwidth,valign=m]{oarc.png}
-%\includegraphics[width=0.4\textwidth,valign=m]{frars.png}
-%\includegraphics[width=0.13\textwidth,valign=m]{pota.png}
-%\includegraphics[width=0.095\textwidth,valign=m]{wwff.png}
-\includegraphics[width=0.095\textwidth,valign=m]{sota.png}
-%\includegraphics[width=0.1\textwidth,valign=m]{ukbota.png}
-%\includegraphics[width=0.055\textwidth,valign=m]{bota.png}
-\includegraphics[width=0.07\textwidth,valign=m]{League_diamond_bw_high.jpg}
-\end{minipage}
-\hfill
-\begin{minipage}{0.3\textwidth}
-\vspace{0.5em}
-{\footnotesize VY 73,}
-
-\vspace{1.5em}
-\makebox{\rule[-0.5em]{11em}{0.4pt}}
-\end{minipage}
+% Front of the postcard: just the Massachusetts state seal, cropped to
+% its artwork (white margin trimmed) and sized so its height is close
+% to the card's own height, centered on the page.
+\begin{tikzpicture}[remember picture, overlay]
+  \node [anchor=center] at (current page.center) {
+    \includegraphics[height=3.2in]{images/maflag_cropped.png}
+  };
+\end{tikzpicture}
 
 \end{document}
